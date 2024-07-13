@@ -39,21 +39,6 @@ export class BrokerService {
           await fn(JSON.parse(msg.content.toString()))
           channel.close()
         }catch(ex){
-          console.log({ex})
-          console.log(`${queue} consumer error: ${ex}`)
-        }
-      }
-    })
-  }
-
-  async watch(queue: string, fn: Function){
-    const channel = await this.getChannel(queue)
-    channel.consume(queue, async(msg)=>{
-      channel.ack(msg)
-      if(msg.content){
-        try{
-          await fn(JSON.parse(msg.content.toString()))
-        }catch(ex){
           console.log(`${queue} consumer error: ${ex}`)
         }
       }

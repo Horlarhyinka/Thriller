@@ -32,3 +32,5 @@ export class Flight{
 }
 
 export const FlightSchema = SchemaFactory.createForClass(Flight)
+
+export const FlightModel = mongoose.model(Flight.name, FlightSchema)

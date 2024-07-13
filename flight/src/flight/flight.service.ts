@@ -15,6 +15,8 @@ export class FlightService implements OnModuleInit{
         private brokerService: BrokerService
     ){}
 
+    static brokerService = new BrokerService()
+
     async create(obj: CreateFlightDto){
         const existingName = await this.getByName(obj.name)
         if(existingName)throw new HttpException(`flight "${existingName.name}" already exists.`, HttpStatus.BAD_REQUEST)
@@ -54,23 +56,17 @@ export class FlightService implements OnModuleInit{
     }
 
     async onModuleInit() {
-        this.brokerService.watch(Channels.GETFLIGHT, async(d)=>{
-            const id = d?.id
+        this.brokerService.watch(Channels.NEWBOOKING, async(d: {flightId: string, email: string, userId: string})=>{
+            const {flightId: id, email, userId} = d
             if(!id)return
             const target = await this.flightModel.findById(id)
-            if(!id){
-                return this.brokerService.sendToQueue(Channels.GETFLIGHTRES, {data: null})
+            if(!target){
+                return this.brokerService.sendToQueue(Channels.NEWBOOKINGCALLBACK, {flight: null, email, userId})
             }else{
-                return this.brokerService.sendToQueue(Channels.GETFLIGHTRES, {data: {flight: {...target.toObject()}}})
-            }
-        })
-
-        this.brokerService.watch(Channels.NEWBOOKING, async(d)=>{
-            const id = d?.id
-            if(!id)return
-            const target = await this.flightModel.findById(id)
             target.passengers += 1
             await target.save()
+                return this.brokerService.sendToQueue(Channels.NEWBOOKINGCALLBACK, {flight: target, email, userId})
+            }
         })
     }
 
