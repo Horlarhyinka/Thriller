@@ -3,7 +3,7 @@ import * as dotenv from "dotenv"
 dotenv.config()
 
 export const appConfig = {
-    port: process.env.PORT || 8000,
+    port: process.env.PORT || 3004,
     host: process.env.HOST || "localhost",
     secret: process.env.APP_SECRET
 }

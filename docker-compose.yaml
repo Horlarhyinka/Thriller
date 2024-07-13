@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  user-service:
+    build:
+      context: ./user
+      dockerfile: Dockerfile
+    container_name: user-service
+    ports:
+      - '3001:3001'
+
+  booking-service:
+    build:
+      context: ./booking
+      dockerfile: Dockerfile
+    container_name: booking-service
+    ports:
+      - '3004:3004'
+  notification-service:
+    build:
+      context: ./notification
+      dockerfile: Dockerfile
+    container_name: notification-service
+    ports:
+      - '3002:3002'
+  flight-service:
+    build:
+      context: ./flight
+      dockerfile: Dockerfile
+    container_name: flight-service
+    ports:
+      - '3003:3003'
