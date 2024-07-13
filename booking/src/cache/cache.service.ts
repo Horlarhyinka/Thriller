@@ -1,11 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import * as redis from "redis";
+import { redisConfig } from 'src/config/config';
 
 @Injectable()
 export class CacheService {
     private client: redis.RedisClientType
     constructor(){
-    this.client = redis.createClient()
+    this.client = redis.createClient({
+        password: redisConfig.password,
+        socket: {
+            host: redisConfig.host,
+            port: redisConfig.port? Number(redisConfig.port):undefined
+        }
+    });
         this.client.connect()
         .then(()=>{
             console.log("connected to redis client")

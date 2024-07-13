@@ -18,5 +18,7 @@ export const amqpConfig = {
 }
 
 export const redisConfig = {
-    url: ""
+    password: process.env.REDIS_PASSWORD,
+    port: process.env.REDIS_PORT,
+    host: process.env.REDIS_HOST,
 }

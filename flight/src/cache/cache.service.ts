@@ -1,13 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import * as redis from "redis"
-import { appConfig, redisConfig } from 'src/config/config';
+import * as redis from "redis";
+import { redisConfig } from 'src/config/config';
 
 @Injectable()
 export class CacheService {
     private client: redis.RedisClientType
     constructor(){
-        this.client = redis.createClient()
-        
+    this.client = redis.createClient({
+        password: redisConfig.password,
+        socket: {
+            host: redisConfig.host,
+            port: redisConfig.port? Number(redisConfig.port):undefined
+        }
+    });
+        this.client.connect()
+        .then(()=>{
+            console.log("connected to redis client")
+        })
+        .catch((err)=>{ console.log("redis error: ", err)})
     }
     async get(key: string){
         const raw = await this.client.get(key)
@@ -26,8 +36,14 @@ export class CacheService {
         if(exist)return JSON.parse(exist)
         const n = await fn()
         if(!n)return null
-        const str = await JSON.stringify(n)
+        const str = JSON.stringify(n)
         await this.client.setEx(key, exp*1000, str)
         return n
     }
+
+    async delete(key: string){
+        return this.client.del(key)
+    }
 }
+
+

@@ -29,3 +29,9 @@ export interface ValidationPipeOptions extends ValidatorOptions {
     disableErrorMessages?: boolean;
     exceptionFactory?: (errors: ValidationError[]) => any;
   }
+
+  export const redisConfig = {
+    password: process.env.REDIS_PASSWORD,
+    port: process.env.REDIS_PORT,
+    host: process.env.REDIS_HOST,
+}
