@@ -58,7 +58,6 @@ export class AuthService implements OnModuleInit{
             
             const token = d?.token;
             if (!token) return this.sendUnauthorised();
-    
             try {
                 const r = jwt.verify(token, appConfig.secret) as { id: string };
                 const { id } = r;
@@ -72,7 +71,6 @@ export class AuthService implements OnModuleInit{
                     message: "authorized"
                 });
             } catch (err) {
-                console.log({ err });
                 return this.sendUnauthorised();
             }
         });
