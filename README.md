@@ -41,11 +41,16 @@ This project is a NestJS-based application comprising four microservices: User, 
 
 ### User Microservice
 
-Live url - [text](https://thriller-user.onrender.com)
-
-Handles user authentication and management.
+Handles user authentication,  and management.
 
 **Controller: AuthController**
+
+  **Live Link**
+  visit the deployed link at [https://thriller-user.onrender.com](https://thriller-user.onrender.com)
+
+  **Documentation**
+  visit api documentation for this service at [see swagger doc](https://thriller-user.onrender.com/apidocs)
+
 - **Endpoints:**
   - \`POST /auth/login\`: User login
   - \`PUT /auth/forget-password\`: Request password reset
@@ -56,48 +61,51 @@ Handles user authentication and management.
 **Controller: UserController**
 - **Endpoints:**
   - \`POST /user/\`: Create user
-  - \`POST /user/admin\`: Create admin user
+  - \`POST /user/admin\`: Create admin user (this endpoint requires authentication and can only be accessed by a user account with SUPERADMIN role)
 
-**DTOs:**
-- \`CreateUserDto\`
-- \`CreateAdminDto\`
-- \`LoginDto\`
-- \`ForgetPasswordDto\`
-- \`ResetPasswordDto\`
 
 ### Notification Microservice
 
 Handles email notifications.
+this is a message queue based microservice with no REST API endpoint (note: email is currently configured with mailtrap and you will not receive them in your inbox, you can generate email app password and username and use as MAIL_PASSWORD and MAIL_USER respectively in the notification service .env)
 
 **Controller: MailController**
 - **Message Patterns:**
+here are the registered queue channels for the notification service.
   - \`Channels.FORGET_PASSWORD\`: Send forget password email
   - \`Channels.RESET_PASSWORD\`: Send reset password email
   - \`Channels.CUSTOM_MAIL\`: Send custom email
 
 ### Flight Microservice
 
-Manages flights and their details.
+Manages flightn details and communicates with the booking service (for flight booking) and user service (for authorization)  using rabbitmq event.
 
-Live url - [text](https://thriller-flight.onrender.com)
+
+**Live link**
+  visit the deployed link at [https://thriller-flight.onrender.com](https://thriller-flight.onrender.com)
+
+  **Documentation**
+  visit api documentation for this service at [see swagger doc](https://thriller-flight.onrender.com/apidocs)
+
 
 **Controller: FlightController**
 - **Endpoints:**
-  - \`POST /flight\`: Create flight
-  - \`PUT /flight/:id\`: Update flight
+  - \`POST /flight\`: Create flight (ADMIN role only)
+  - \`PUT /flight/:id\`: Update flight (ADMIN role only)
   - \`GET /flight\`: Get all flights
   - \`GET /flight/:id\`: Get flight by ID
-  - \`DELETE /flight/:id\`: Delete flight
-
-**DTOs:**
-- \`CreateFlightDto\`
-- \`UpdateFlightDto\`
+  - \`DELETE /flight/:id\`: Delete flight (ADMIN role only)
 
 ### Booking Microservice
 
-Manages flight bookings.
+Manages flight bookings and communicate with the user and flight microservice through rabbitmq events.
 
-Live url - [text](https://thriller-booking.onrender.com)
+**Live link**
+  visit the deployed link at [https://thriller-booking.onrender.com](https://thriller-booking.onrender.com)
+
+  **Documentation**
+  visit api documentation for this service at [see swagger doc](https://thriller-booking.onrender.com/apidocs)
+
 
 **Controller: BookingController**
 - **Endpoints:**
@@ -107,9 +115,6 @@ Live url - [text](https://thriller-booking.onrender.com)
   - \`GET /booking/by-user/:id\`: Get bookings by user ID
   - \`GET /booking/:id\`: Get booking by ID
   - \`DELETE /booking/:id\`: Delete booking
-
-**DTOs:**
-- \`CreateBookingDto\`
 
 ## Usage
 

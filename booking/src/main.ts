@@ -11,7 +11,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe())
 
   const swaggerConfig = new DocumentBuilder()
-  .setTitle("Thriller's Travel Task Documentation")
+  .setTitle("Thriller Travel's Task Documentation")
   .setDescription("API documentation for bookings microservice")
   .setVersion("1.0")
   .addTag("Thriller")
